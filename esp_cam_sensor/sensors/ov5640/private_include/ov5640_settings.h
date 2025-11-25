@@ -6,58 +6,46 @@
 
 #pragma once
 
-#include <stdint.h>
-#include <sdkconfig.h>
 #include "ov5640_regs.h"
 #include "ov5640_types.h"
+#include <sdkconfig.h>
+#include <stdint.h>
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-#define OV5640_SOFT_POWER_DOWN_EN                 (0x42)
-#define OV5640_SOFT_POWER_DOWN_DIS                (0x02)
-#define OV5640_OUTPUT_ENABLE_DEFAULT              (0)
-#define OV5640_IDI_CLOCK_RATE_1280x720_14FPS      (80000000ULL)
+#define OV5640_SOFT_POWER_DOWN_EN (0x42)
+#define OV5640_SOFT_POWER_DOWN_DIS (0x02)
+#define OV5640_OUTPUT_ENABLE_DEFAULT (0)
+#define OV5640_IDI_CLOCK_RATE_1280x720_14FPS (80000000ULL)
 // Note, for mipi rgb565\yuv422\yuv420 use 16bit trans len for each pixel
-#define OV5640_LINE_RATE_16BITS_1280x720_14FPS    (OV5640_IDI_CLOCK_RATE_1280x720_14FPS * 8)
+#define OV5640_LINE_RATE_16BITS_1280x720_14FPS                                 \
+  (OV5640_IDI_CLOCK_RATE_1280x720_14FPS * 8)
 
-#define ov5640_settings_raw8 \
-    {FORMAT_CTRL0, 0x00}, \
-    {FORMAT_MUX_CTRL, 0x03}, \
+#define ov5640_settings_raw8 {FORMAT_CTRL0, 0x00}, {FORMAT_MUX_CTRL, 0x03},
 
-#define ov5640_settings_yuv420 \
-    {FORMAT_CTRL0, 0x5F}, \
-    {FORMAT_MUX_CTRL, 0x00}, \
+#define ov5640_settings_yuv420 {FORMAT_CTRL0, 0x5F}, {FORMAT_MUX_CTRL, 0x00},
 
 #if CONFIG_CAMERA_SENSOR_SWAP_PIXEL_BYTE_ORDER
 // send in [Cb Y Cr Y] order.
-#define ov5640_settings_yuv422 \
-    {FORMAT_CTRL0, 0x33}, \
-    {FORMAT_MUX_CTRL, 0x00}, \
+#define ov5640_settings_yuv422 {FORMAT_CTRL0, 0x33}, {FORMAT_MUX_CTRL, 0x00},
 
 // send in [R[4:0],G[5:3],G[2:0],B[4:0]] order.
-#define ov5640_settings_rgb565 \
-    {FORMAT_CTRL0, 0x61}, \
-    {FORMAT_MUX_CTRL, 0x01}, \
+#define ov5640_settings_rgb565 {FORMAT_CTRL0, 0x61}, {FORMAT_MUX_CTRL, 0x01},
 
 #else
 // send in [Y Cb Y Cr] order.
-#define ov5640_settings_yuv422 \
-    {FORMAT_CTRL0, 0x31}, \
-    {FORMAT_MUX_CTRL, 0x00}, \
+#define ov5640_settings_yuv422 {FORMAT_CTRL0, 0x31}, {FORMAT_MUX_CTRL, 0x00},
 
 // send in [G[2:0],B[4:0],R[4:0],G[5:3]] order.
-#define ov5640_settings_rgb565 \
-    {FORMAT_CTRL0, 0x6F}, \
-    {FORMAT_MUX_CTRL, 0x01}, \
+#define ov5640_settings_rgb565 {FORMAT_CTRL0, 0x6F}, {FORMAT_MUX_CTRL, 0x01},
 
 #endif
 
 /* Note, YUV444/RGB888 not available for full resolution(2592x1964) */
-#define ov5640_settings_rgb888 \
-    {FORMAT_CTRL0, 0x25}, \
-    {FORMAT_MUX_CTRL, 0x00}
+#define ov5640_settings_rgb888                                                 \
+  {FORMAT_CTRL0, 0x25}, { FORMAT_MUX_CTRL, 0x00 }
 
 #if CONFIG_SOC_MIPI_CSI_SUPPORTED
 static const ov5640_reginfo_t ov5640_mipi_reset_regs[] = {
@@ -67,7 +55,8 @@ static const ov5640_reginfo_t ov5640_mipi_reset_regs[] = {
     // Ensure streaming off to make clock lane go into LP-11 state.
     {0x4800, 0x05},
     {OV5640_REG_DELAY, 0x10},
-    {0x3008, OV5640_SOFT_POWER_DOWN_EN}, // bit[6]=1: software power down default
+    {0x3008,
+     OV5640_SOFT_POWER_DOWN_EN}, // bit[6]=1: software power down default
     {OV5640_REG_END, 0x00},
 };
 
@@ -99,10 +88,10 @@ static const ov5640_reginfo_t ov5640_MIPI_2lane_rgb565_720p_14fps[] = {
     {0x3906, 0x10},
     {0x3901, 0x0a},
     {0x3731, 0x02},
-    //VCM debug mode
+    // VCM debug mode
     {0x3600, 0x37},
     {0x3601, 0x33},
-    //System control register changing not recommended
+    // System control register changing not recommended
     {0x302d, 0x60},
     {0x3620, 0x52},
     {0x371b, 0x20},
@@ -125,9 +114,11 @@ static const ov5640_reginfo_t ov5640_MIPI_2lane_rgb565_720p_14fps[] = {
     {0x3c0b, 0x40},
     {0x503d, 0x00},
     {0x3820, 0x46},
-    //[7:5]=001 Two lane mode, [4]=0 MIPI HS TX no power down, [3]=0 MIPI LP RX no power down, [2]=1 MIPI enable, [1:0]=10 Debug mode; Default=0x58
+    //[7:5]=001 Two lane mode, [4]=0 MIPI HS TX no power down, [3]=0 MIPI LP RX
+    // no power down, [2]=1 MIPI enable, [1:0]=10 Debug mode; Default=0x58
     {0x300e, 0x45},
-    //[5]=0 Clock free running, [4]=1 Send line short packet, [3]=0 Use lane1 as default, [2]=1 MIPI bus LP11 when no packet; Default=0x04
+    //[5]=0 Clock free running, [4]=1 Send line short packet, [3]=0 Use lane1 as
+    // default, [2]=1 MIPI bus LP11 when no packet; Default=0x04
     {0x4800, CONFIG_CAMERA_OV5640_CSI_LINESYNC_ENABLE ? 0x14 : 0x04},
     {0x302e, 0x08},
     {0x4300, 0x6f},
@@ -147,7 +138,8 @@ static const ov5640_reginfo_t ov5640_MIPI_2lane_rgb565_720p_14fps[] = {
     {0x3036, OV5640_IDI_CLOCK_RATE_1280x720_14FPS / 1000000},
     //[4]=0 PLL root divider /1, [3:0]=5 PLL pre-divider /1.5
     {0x3037, 0x05},
-    //[5:4]=01 PCLK root divider /2, [3:2]=00 SCLK2x root divider /1, [1:0]=01 SCLK root divider /2
+    //[5:4]=01 PCLK root divider /2, [3:2]=00 SCLK2x root divider /1, [1:0]=01
+    // SCLK root divider /2
     {0x3108, 0x11},
 
     //[3:0]=0 X address start high byte
@@ -186,25 +178,29 @@ static const ov5640_reginfo_t ov5640_MIPI_2lane_rgb565_720p_14fps[] = {
     //[7:0] Output vertical height low byte
     {0x380b, 720 & 0xFF},
 
-    //HTS line exposure time in # of pixels Tline=HTS/sclk
+    // HTS line exposure time in # of pixels Tline=HTS/sclk
     {0x380c, (2844 >> 8) & 0x1F},
     {0x380d, 2844 & 0xFF},
-    //VTS frame exposure time in # lines
+    // VTS frame exposure time in # lines
     {0x380e, (1968 >> 8) & 0xFF},
     {0x380f, 1968 & 0xFF},
 
-    //[7:4]=0x1 horizontal odd subsample increment, [3:0]=0x1 horizontal even subsample increment
+    //[7:4]=0x1 horizontal odd subsample increment, [3:0]=0x1 horizontal even
+    // subsample increment
     {0x3814, 0x11},
-    //[7:4]=0x1 vertical odd subsample increment, [3:0]=0x1 vertical even subsample increment
+    //[7:4]=0x1 vertical odd subsample increment, [3:0]=0x1 vertical even
+    // subsample increment
     {0x3815, 0x11},
 
     //[2]=0 ISP mirror, [1]=0 sensor mirror, [0]=1 horizontal binning
     {0x3821, 0x00},
 
-    //little MIPI shit: global timing unit, period of PCLK in ns * 2(depends on # of lanes)
-    {0x4837, (1000000000 / OV5640_IDI_CLOCK_RATE_1280x720_14FPS) * 2}, // 1/40M*2
+    // little MIPI shit: global timing unit, period of PCLK in ns * 2(depends on
+    // # of lanes)
+    {0x4837,
+     (1000000000 / OV5640_IDI_CLOCK_RATE_1280x720_14FPS) * 2}, // 1/40M*2
 
-    //Undocumented anti-green settings
+    // Undocumented anti-green settings
     {0x3618, 0x04}, // Removes vertical lines appearing under bright light
     {0x3612, 0x2b},
     // {0x3708, 0x64},
@@ -237,14 +233,187 @@ static const ov5640_reginfo_t ov5640_MIPI_2lane_rgb565_720p_14fps[] = {
     {0x5183, 0x00},
     {OV5640_REG_END, 0x00},
 };
+
+static const ov5640_reginfo_t ov5640_MIPI_2lane_raw10b_720p_14fps[] = {
+    {0x3103, 0x03},
+    {0x3017, 0x00},
+    {0x3018, 0x00},
+    // {0x3034, (TEST_CSI_COLOR_MODE==MIPI_CSI_RAW10_MODE) ? 0x1A : 0x18},
+    {0x3034, 0x1A}, // RAW10
+    {0x3035, 0x11},
+    {0x3036, 0x38},
+    {0x3037, 0x11},
+    {0x3108, 0x01},
+    {0x303D, 0x10},
+    {0x303B, 0x19},
+
+    {0x3630, 0x2e},
+    {0x3631, 0x0e},
+    {0x3632, 0xe2},
+    {0x3633, 0x23},
+    {0x3621, 0xe0},
+    {0x3704, 0xa0},
+    {0x3703, 0x5a},
+    {0x3715, 0x78},
+    {0x3717, 0x01},
+    {0x370b, 0x60},
+    {0x3705, 0x1a},
+    {0x3905, 0x02},
+    {0x3906, 0x10},
+    {0x3901, 0x0a},
+    {0x3731, 0x02},
+    // VCM debug mode
+    {0x3600, 0x37},
+    {0x3601, 0x33},
+    // System control register changing not recommended
+    {0x302d, 0x60},
+    {0x3620, 0x52},
+    {0x371b, 0x20},
+    {0x471c, 0x50},
+    {0x3a13, 0x43},
+    {0x3a18, 0x00},
+    {0x3a19, 0xf8},
+    {0x3635, 0x13},
+    {0x3636, 0x06},
+    {0x3634, 0x44},
+    {0x3622, 0x01},
+    {0x3c01, 0x34},
+    {0x3c04, 0x28},
+    {0x3c05, 0x98},
+    {0x3c06, 0x00},
+    {0x3c07, 0x08},
+    {0x3c08, 0x00},
+    {0x3c09, 0x1c},
+    {0x3c0a, 0x9c},
+    {0x3c0b, 0x40},
+    {0x503d, 0x00},
+    {0x3820, 0x46},
+    //[7:5]=001 Two lane mode, [4]=0 MIPI HS TX no power down, [3]=0 MIPI LP RX
+    // no power down, [2]=1 MIPI enable, [1:0]=10 Debug mode; Default=0x58
+    {0x300e, 0x45},
+    //[5]=0 Clock free running, [4]=1 Send line short packet, [3]=0 Use lane1 as
+    // default, [2]=1 MIPI bus LP11 when no packet; Default=0x04
+    {0x4800, CONFIG_CAMERA_OV5640_CSI_LINESYNC_ENABLE ? 0x14 : 0x04},
+    {0x302e, 0x08},
+    {0x4300, 0x6f},
+    {0x501f, 0x01},
+
+    {0x4713, 0x03},
+    {0x4407, 0x04},
+    {0x440e, 0x00},
+    {0x460b, 0x35},
+    {0x460c, 0x20},
+    {0x3824, 0x01},
+    {0x5000, 0x07},
+    {0x5001, 0x03},
+    // test
+    {0x3035, 0x21},
+    //[7:0]=40 PLL multiplier
+    {0x3036, OV5640_IDI_CLOCK_RATE_1280x720_14FPS / 1000000},
+    //[4]=0 PLL root divider /1, [3:0]=5 PLL pre-divider /1.5
+    {0x3037, 0x05},
+    //[5:4]=01 PCLK root divider /2, [3:2]=00 SCLK2x root divider /1, [1:0]=01
+    // SCLK root divider /2
+    {0x3108, 0x11},
+
+    //[3:0]=0 X address start high byte
+    {0x3800, (0 >> 8) & 0x0F},
+    //[7:0]=0 X address start low byte
+    {0x3801, 0 & 0xFF},
+    //[2:0]=0 Y address start high byte
+    {0x3802, (0 >> 8) & 0x07},
+    //[7:0]=0 Y address start low byte
+    {0x3803, 0 & 0xFF},
+
+    //[3:0] X address end high byte
+    {0x3804, (2623 >> 8) & 0x0F},
+    //[7:0] X address end low byte
+    {0x3805, 2623 & 0xFF},
+    //[2:0] Y address end high byte
+    {0x3806, (1951 >> 8) & 0x07},
+    //[7:0] Y address end low byte
+    {0x3807, 1951 & 0xFF},
+
+    //[3:0]=0 timing hoffset high byte
+    {0x3810, (16 >> 8) & 0x0F},
+    //[7:0]=0 timing hoffset low byte
+    {0x3811, 16 & 0xFF},
+    //[2:0]=0 timing voffset high byte
+    {0x3812, (4 >> 8) & 0x07},
+    //[7:0]=0 timing voffset low byte
+    {0x3813, 4 & 0xFF},
+
+    //[3:0] Output horizontal width high byte
+    {0x3808, (1280 >> 8) & 0x0F},
+    //[7:0] Output horizontal width low byte
+    {0x3809, 1280 & 0xFF},
+    //[2:0] Output vertical height high byte
+    {0x380a, (720 >> 8) & 0x7F},
+    //[7:0] Output vertical height low byte
+    {0x380b, 720 & 0xFF},
+
+    // HTS line exposure time in # of pixels Tline=HTS/sclk
+    {0x380c, (2844 >> 8) & 0x1F},
+    {0x380d, 2844 & 0xFF},
+    // VTS frame exposure time in # lines
+    {0x380e, (1968 >> 8) & 0xFF},
+    {0x380f, 1968 & 0xFF},
+
+    //[7:4]=0x1 horizontal odd subsample increment, [3:0]=0x1 horizontal even
+    // subsample increment
+    {0x3814, 0x11},
+    //[7:4]=0x1 vertical odd subsample increment, [3:0]=0x1 vertical even
+    // subsample increment
+    {0x3815, 0x11},
+
+    //[2]=0 ISP mirror, [1]=0 sensor mirror, [0]=1 horizontal binning
+    {0x3821, 0x00},
+
+    // little MIPI shit: global timing unit, period of PCLK in ns * 2(depends on
+    // # of lanes)
+    {0x4837,
+     (1000000000 / OV5640_IDI_CLOCK_RATE_1280x720_14FPS) * 2}, // 1/40M*2
+
+    // Undocumented anti-green settings
+    {0x3618, 0x04}, // Removes vertical lines appearing under bright light
+    {0x3612, 0x2b},
+    // {0x3708, 0x64},
+    {0x3709, 0x12},
+    {0x370c, 0x00},
+
+    {0x4300, 0x00},
+    //[2:0]=0x0 Format select RAW10
+    {0x501f, 0x03},
+    {0x5000, 0x06},
+    {0x5001, 0x01},
+
+    // Enable Advanced AWB
+    {0x3406, 0x00},
+    {0x5192, 0x04},
+    {0x5191, 0xf8},
+    {0x518d, 0x26},
+    {0x518f, 0x42},
+    {0x518e, 0x2b},
+    {0x5190, 0x42},
+    {0x518b, 0xd0},
+    {0x518c, 0xbd},
+    {0x5187, 0x18},
+    {0x5188, 0x18},
+    {0x5189, 0x56},
+    {0x518a, 0x5c},
+    {0x5186, 0x1c},
+    {0x5181, 0x50},
+    {0x5184, 0x20},
+    {0x5182, 0x11},
+    {0x5183, 0x00},
+    {OV5640_REG_END, 0x00},
+};
 #endif
 
 #if CONFIG_SOC_LCDCAM_CAM_SUPPORTED
 static const ov5640_reginfo_t ov5640_dvp_reset_regs[] = {
-    {0x3103, 0x11},
-    {0x3008, 0x82},
-    {OV5640_REG_DELAY, 0x05},
-    {0x3008, OV5640_SOFT_POWER_DOWN_EN},
+    {0x3103, 0x11},           {0x3008, 0x82},
+    {OV5640_REG_DELAY, 0x05}, {0x3008, OV5640_SOFT_POWER_DOWN_EN},
     {OV5640_REG_END, 0x00},
 };
 
@@ -342,8 +511,7 @@ static const ov5640_reginfo_t ov5640_dvp_yuv422_svga_10fps[] = {
     {0x300e, 0x58},
     {0x302e, 0x00},
     {0x4740, 0x20},
-    ov5640_settings_yuv422
-    {0x501f, 0x00},
+    ov5640_settings_yuv422{0x501f, 0x00},
     {0x4713, 0x03},
     {0x4407, 0x04},
     {0x440e, 0x00},
@@ -683,8 +851,7 @@ static const ov5640_reginfo_t ov5640_dvp_rgb565_svga_10fps[] = {
     {0x300e, 0x58},
     {0x302e, 0x00},
     {0x4740, 0x20},
-    ov5640_settings_rgb565
-    {0x4713, 0x03},
+    ov5640_settings_rgb565{0x4713, 0x03},
     {0x4407, 0x04},
     {0x440e, 0x00},
     {0x460b, 0x35},

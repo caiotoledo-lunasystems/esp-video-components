@@ -41,12 +41,19 @@ if CAMERA_OV5640
             help
                 RGB565 color format at 1280x720 resolution (HD) with 14fps framerate.
                 Requires MIPI CSI-2 2-lane interface with 24MHz input clock.
+
+        config CAMERA_OV5640_MIPI_RAW10_1280X720_14FPS
+            bool "RAW10 1280x720 14fps, MIPI 2-lane, 24M input"
+            help
+                RAW10 color format at 1280x720 resolution (HD) with 14fps framerate.
+                Requires MIPI CSI-2 2-lane interface with 24MHz input clock.
     endchoice # CAMERA_OV5640_MIPI_DEFAULT_FMT
 
     config CAMERA_OV5640_MIPI_IF_FORMAT_INDEX_DEFAULT
         int
         depends on SOC_MIPI_CSI_SUPPORTED
         default 0 if CAMERA_OV5640_MIPI_RGB565_1280X720_14FPS
+        default 1 if CAMERA_OV5640_MIPI_RAW10_1280X720_14FPS
         help
             Sets the default configuration for the MIPI CSI interface.
             Use query_support_formats() API to get more format options.
