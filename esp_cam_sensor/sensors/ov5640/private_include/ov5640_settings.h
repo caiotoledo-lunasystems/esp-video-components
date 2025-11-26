@@ -317,13 +317,13 @@ static const ov5640_reginfo_t ov5640_MIPI_2lane_raw10b_720p_14fps[] = {
     {0x3108, 0x11},
 
     //[3:0]=0 X address start high byte
-    {0x3800, (0 >> 8) & 0x0F},
+    {0x3800, (220 >> 8) & 0x0F},
     //[7:0]=0 X address start low byte
-    {0x3801, 0 & 0xFF},
+    {0x3801, 220 & 0xFF},
     //[2:0]=0 Y address start high byte
-    {0x3802, (0 >> 8) & 0x07},
+    {0x3802, (262 >> 8) & 0x07},
     //[7:0]=0 Y address start low byte
-    {0x3803, 0 & 0xFF},
+    {0x3803, 262 & 0xFF},
 
     //[3:0] X address end high byte
     {0x3804, (2623 >> 8) & 0x0F},
@@ -335,13 +335,13 @@ static const ov5640_reginfo_t ov5640_MIPI_2lane_raw10b_720p_14fps[] = {
     {0x3807, 1951 & 0xFF},
 
     //[3:0]=0 timing hoffset high byte
-    {0x3810, (16 >> 8) & 0x0F},
+    {0x3810, (561 >> 8) & 0x0F},
     //[7:0]=0 timing hoffset low byte
-    {0x3811, 16 & 0xFF},
+    {0x3811, 561 & 0xFF},
     //[2:0]=0 timing voffset high byte
-    {0x3812, (4 >> 8) & 0x07},
+    {0x3812, (361 >> 8) & 0x07},
     //[7:0]=0 timing voffset low byte
-    {0x3813, 4 & 0xFF},
+    {0x3813, 361 & 0xFF},
 
     //[3:0] Output horizontal width high byte
     {0x3808, (1280 >> 8) & 0x0F},
